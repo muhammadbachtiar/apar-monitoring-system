@@ -1,0 +1,32 @@
+#wrapper{
+  background-color: #EDEDED;
+}
+.header-row {
+  width: 100%;
+}
+.dropdown-menu[data-bs-popper]{
+  right: 0;
+  left: auto;
+}
+
+.sidebar-list .badge{
+  background-color: #F73859;
+  color: white;
+  border-radius: 50%;
+  padding: 8px;
+  margin: 0 5px;
+  }
+  
+  .sidebar-list a{
+    text-decoration: none;
+    font-size: large;
+    font-weight: 500;
+  }
+
+  .not-readed-notification{
+    background-color: #EDEDED;
+  }
+
+  .not-readed-notification :hover{
+    cursor: pointer;
+  }
