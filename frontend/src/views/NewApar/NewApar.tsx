@@ -189,6 +189,7 @@ function AddApar() {
                                                         onChange={(selectedOption) =>
                                                             handleSelectChange(selectedOption, 'id_location', index)
                                                           }
+                                                        required
                                                     />
                                         </Form.Group>
                                         <Form.Group as={Col} md="3" controlId={`validationCustom0${index + 2}`}>
@@ -203,6 +204,7 @@ function AddApar() {
                                                         onChange={(selectedOption) =>
                                                             handleSelectChange(selectedOption, 'apar_type', index)
                                                           }
+                                                        required
                                                     />
                                         </Form.Group>
                                         <Form.Group as={Col} md="3" controlId={`validationCustom0${index + 2}`}>
@@ -216,7 +218,7 @@ function AddApar() {
                                     </Row>
                                     <Row className='my-3'>
                                         <Form.Group as={Col} md="3" controlId={`validationCustom0${index + 2}`}>
-                                            <Form.Label>Pemeriksaan 6 Bulanan Terakhir</Form.Label>
+                                            <Form.Label>Pemeriksaan Semester Terakhir</Form.Label>
                                                 <Form.Control
                                                 required
                                                 type="date"
@@ -225,7 +227,7 @@ function AddApar() {
                                                 />
                                         </Form.Group>
                                         <Form.Group as={Col} md="3" controlId={`validationCustom0${index + 2}`}>
-                                            <Form.Label>Pemeriksaan 1 Bulanan Terakhir</Form.Label>
+                                            <Form.Label>Pemeriksaan Bulanan Terakhir</Form.Label>
                                                 <Form.Control
                                                 required
                                                 type="date"

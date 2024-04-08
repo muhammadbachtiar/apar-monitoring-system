@@ -430,6 +430,7 @@ function FixApar() {
                             label={`Ya`}
                             checked={isMakeSureChecked}
                             onChange={handleMakeSureChange}
+                            required
                         />
                 </Form.Group>
             </Modal.Body>

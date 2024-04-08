@@ -115,7 +115,7 @@ function InfoApar() {
                                     </td>
                                 </tr>
                                 <tr>
-                                    <th>Pemeriksaan Semesteran</th>
+                                    <th>Pemeriksaan Semester</th>
                                     <td>
                                         <ul>
                                             <li>
@@ -129,14 +129,14 @@ function InfoApar() {
                                                             })}
                                             </li>
                                             <li>
-                                                Pemeriksa 
+                                                Pemeriksa :
                                                 {
                                                     aparData?.location.checker
                                                         .filter(checker => checker.checker_type === '6MONTHLY')
                                                         .map((checker, index, array) => (
                                                             <span key={checker.id}>
-                                                            : {checker.user.name}
-                                                                {index < array.length - 1 && ','}
+                                                             {checker.user.name}
+                                                                {index < array.length - 1 && ', '}
                                                             </span>
                                                         ))
                                                 }
@@ -159,14 +159,14 @@ function InfoApar() {
                                                         })}
                                             </li>
                                             <li>
-                                                Pemeriksa 
+                                                Pemeriksa :
                                                 {
                                                     aparData?.location.checker
                                                         .filter(checker => checker.checker_type === '1MONTHLY')
                                                         .map((checker, index, array) => (
                                                             <span key={checker.id}>
-                                                            : {checker.user.name}
-                                                                {index < array.length - 1 && ','}
+                                                            {checker.user.name}
+                                                                {index < array.length - 1 && ', '}
                                                             </span>
                                                         ))
                                                 }
@@ -221,13 +221,13 @@ function InfoApar() {
                     <div className='col-12 col-md-6'>
                     <Row className='p-3'>
                             <Link to={`/inspection-6-monthly/add/${aparData?.id}`}>
-                                <Button className='col-12 my-2'>Pemeriksaan Semesteran</Button>
+                                <Button className='col-12 my-2'>Pemeriksaan Semester</Button>
                             </Link>
                             <Link to={`/inspection-1-monthly/add/${aparData?.id}`}>
                                 <Button className='col-12 my-2'>Pemeriksaan Bulanan</Button>
                             </Link>
                             <Link to={`/history-6-monthly/${aparData?.id}`}>
-                                <Button className='col-12 my-2'>Riwayat Pemeriksaan Semesteran</Button>
+                                <Button className='col-12 my-2'>Riwayat Pemeriksaan Semester</Button>
                             </Link>
                             <Link to={`/history-1-monthly/${aparData?.id}`}>
                                 <Button className='col-12 my-2'>Riwayat Pemeriksaan Bulanan</Button>

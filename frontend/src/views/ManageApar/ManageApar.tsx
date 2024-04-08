@@ -242,7 +242,7 @@ function ManageApar() {
           width: "15%"
         },
         {
-          name: 'Pemeriksa 6 Bulanan',
+          name: 'Pemeriksa Semester',
           cell: row => {
             const type1Checkers = row.location.checker.filter(checker => checker.checker_type === '6MONTHLY');
             return <>
@@ -256,7 +256,7 @@ function ManageApar() {
           width: "12%",
         },
         {
-          name: 'Pemeriksa 1 Bulanan',
+          name: 'Pemeriksa Bulanan',
           cell: row => {
             const type1Checkers = row.location.checker.filter(checker => checker.checker_type === '1MONTHLY');
             return <>
@@ -422,6 +422,7 @@ function ManageApar() {
                         onChange={(selectedOption) =>
                             handleSelectChange(selectedOption, 'id_location')
                             }
+                        required
                     />
                 </Form.Group>
                 <Form.Group>
@@ -438,6 +439,7 @@ function ManageApar() {
                         onChange={(selectedOption) =>
                             handleSelectChange(selectedOption, 'apar_type')
                             }
+                        required
                     />
                 </Form.Group>
                 <Form.Group>
@@ -451,17 +453,19 @@ function ManageApar() {
             </Row>
             <Row className='my-3'>
                 <Form.Group>
-                    <Form.Label>Pemeriksaan 6 Bulanan Terakhir</Form.Label>
+                    <Form.Label>Pemeriksaan Semester Terakhir</Form.Label>
                         <Form.Control
                         type="date"
                         {...register(`check_6monthly`)}
+                        required
                         />
                 </Form.Group>
                 <Form.Group>
-                    <Form.Label>Pemeriksaan 1 Bulanan Terakhir</Form.Label>
+                    <Form.Label>Pemeriksaan Bulanan Terakhir</Form.Label>
                         <Form.Control
                         type="date"
                         {...register(`check_1monthly`)}
+                        required
                         />
                 </Form.Group>
                 <Form.Group>
@@ -469,6 +473,7 @@ function ManageApar() {
                         <Form.Control
                         type="date"
                         {...register(`last_filing_time`)}
+                        required
                         />
                 </Form.Group>
             </Row>

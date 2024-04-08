@@ -238,7 +238,7 @@ function ManageLocation() {
             sortable: true
         },
         {
-          name: 'Pemeriksa 6 Bulanan',
+          name: 'Pemeriksa Semester',
           cell: row => {
             const type1Checkers = row.checker.filter(checker => checker.checker_type === '6MONTHLY');
             return <>
@@ -251,7 +251,7 @@ function ManageLocation() {
           sortable: true
         },
         {
-          name: 'Pemeriksa 1 Bulanan',
+          name: 'Pemeriksa Bulanan',
           cell: row => {
             const type1Checkers = row.checker.filter(checker => checker.checker_type === '1MONTHLY');
             return <>
@@ -355,7 +355,7 @@ function ManageLocation() {
                         </div>
                 </Form.Group>
                 <Form.Group as={Col}>
-                          <Form.Label>Pemeriksa 6 Bulanan</Form.Label>
+                          <Form.Label>Pemeriksa Semester</Form.Label>
                           <Select
                               required
                               placeholder="Pilih Pemeriksa"
@@ -373,7 +373,7 @@ function ManageLocation() {
                           />
               </Form.Group>
               <Form.Group as={Col}>
-                          <Form.Label>Pemeriksa 1 Bulanan</Form.Label>
+                          <Form.Label>Pemeriksa Bulanan</Form.Label>
                           <Select
                               required
                               placeholder="Pilih Pemeriksa"

@@ -41,7 +41,7 @@ const SideBarApp: React.FC<OffcanvasContentProps> = ({ show, handleClose }) => {
                 <Accordion.Header>Pemeriksaan</Accordion.Header>
                 <Accordion.Body>
                   <Link to="/inspection-6-monthly">
-                    <ListGroup.Item action as="div"><span className="badge"><FontAwesomeIcon icon={faListCheck} /></span>Semesteran (6 Bulan)</ListGroup.Item>
+                    <ListGroup.Item action as="div"><span className="badge"><FontAwesomeIcon icon={faListCheck} /></span>Semester (6 Bulan)</ListGroup.Item>
                   </Link>
                   <Link to="/inspection-1-monthly">
                     <ListGroup.Item action as="div"><span className="badge"><FontAwesomeIcon icon={faListCheck} /></span>Bulanan (1 Bulan)</ListGroup.Item>

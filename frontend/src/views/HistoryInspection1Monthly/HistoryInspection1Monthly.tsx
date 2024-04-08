@@ -321,7 +321,7 @@ function HistoryInspection1Monthly() {
             <Breadcrumb.Item linkAs={Link} linkProps={{ to: '/history' }}>Daftar APAR</Breadcrumb.Item>
             <Breadcrumb.Item active>Riwayat</Breadcrumb.Item>
         </Breadcrumb>
-        <Card.Title> Riwayat Pemeriksaan 1 Bulanan  </Card.Title>
+        <Card.Title> Riwayat Pemeriksaan Bulanan  </Card.Title>
         <div className="row my-3 align-items-center">
             <div className="col">
                 <Accordion defaultActiveKey="1" className='mb-4'>

@@ -135,7 +135,7 @@ function InspectionApar() {
             width: "20%"
         },
         {
-          name: 'Pemeriksa 6 Bulanan',
+          name: 'Pemeriksa Semester',
           cell: row => {
             const type1Checkers = row.location.checker.filter(checker => checker.checker_type === '6MONTHLY');
             return <>
@@ -154,7 +154,7 @@ function InspectionApar() {
             sortable: true
         },
         {
-            name: 'Pemeriksaan 6 Bulanan Terakhir',
+            name: 'Pemeriksaan Semester Terakhir',
             selector: row => new Date(row.last_6montly_check_time).toLocaleString('id-ID', {
                 year: 'numeric',
                 month: 'numeric',

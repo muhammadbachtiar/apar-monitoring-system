@@ -190,7 +190,7 @@ function AddLocation() {
                                                   />
                                       </Form.Group>
                                       <Form.Group as={Col} md="3" controlId={`validationCustom0${index + 2}`}>
-                                                  <Form.Label>Pemeriksa 6 Bulanan</Form.Label>
+                                                  <Form.Label>Pemeriksa Semester</Form.Label>
                                                   <Select
                                                       required
                                                       placeholder="Pilih Pemeriksa"
@@ -206,7 +206,7 @@ function AddLocation() {
                                                   />
                                       </Form.Group>
                                       <Form.Group as={Col} md="3" controlId={`validationCustom0${index + 2}`}>
-                                                  <Form.Label>Pemeriksa 1 Bulanan</Form.Label>
+                                                  <Form.Label>Pemeriksa Bulanan</Form.Label>
                                                   <Select
                                                       required
                                                       placeholder="Pilih Pemeriksa"

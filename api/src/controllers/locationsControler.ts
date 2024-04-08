@@ -97,8 +97,25 @@ const getAllLocations = async (req: Request, res: Response): Promise<void> => {
 const updateLocation = async (req: Request & { location?: any }, res: Response): Promise<void> => {
   const locationIdToUpdate = req.params.id
   const data = req.body
+  const location_name = data.data.location_name
   try {
     const locationToUpdate = await LocationModel.query().findById(locationIdToUpdate).withGraphFetched('[checker]')
+
+    if (locationToUpdate === null || locationToUpdate === undefined) {
+      res.status(404).json({ error: 'INVALID_ID', message: 'No location data found by that id' })
+      return
+    }
+
+    if (location_name !== locationToUpdate.location_name) {
+      const existingLocation = await LocationModel.query().findOne({ location_name })
+      if (existingLocation) {
+        res.status(400).json({
+          error: 'INVALID_LOCATION_NAME',
+          message: `Location '${location_name}' is already exists. Please use a different location.`
+        })
+        return
+      }
+    }
 
     if (locationToUpdate === null || locationToUpdate === undefined) {
       res.status(404).json({ error: 'INVALID_ID', message: 'No location data found by that id' })
@@ -157,7 +174,7 @@ const updateLocation = async (req: Request & { location?: any }, res: Response):
       await LocationCheckerModel.query().insert(insertData)
     }
 
-    await LocationModel.query().patchAndFetchById(locationIdToUpdate, { location_name: data.data.location_name, update_time: new Date() })
+    await LocationModel.query().patchAndFetchById(locationIdToUpdate, { location_name, update_time: new Date() })
     res.status(200).json({
       message: `Success Update Location "${locationToUpdate.location_name}" Data`
     })

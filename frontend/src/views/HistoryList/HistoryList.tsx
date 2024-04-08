@@ -134,13 +134,13 @@ function HistoryList() {
             sortable: true
         },
         {
-            name: 'Riwayat 6 Bulanan',
+            name: 'Riwayat Semester',
             cell: row => <>
                           <Link to={`/history-6-monthly/${row.id}`}><Button variant="success" className='mx-1'><FontAwesomeIcon icon={faClipboard} /></Button></Link>
                         </>,
         },
         {
-            name: 'Riwayat 1 Bulanan',
+            name: 'Riwayat Bulanan',
             cell: row => <>
                           <Link to={`/history-1-monthly/${row.id}`}><Button variant="success" className='mx-1'><FontAwesomeIcon icon={faClipboard} /></Button></Link>
                         </>,

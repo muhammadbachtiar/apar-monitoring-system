@@ -263,18 +263,18 @@ function Profile() {
                         <Row className="mb-3 my-2">
                             <Form.Group as={Col} md="3" controlId="validationCustom03">
                                 <Form.Label>Password Lama</Form.Label>
-                                <Form.Control type="password" name='oldPassword' placeholder="Password Lama" onBlur={handleChange} required />
+                                <Form.Control type="password" name='oldPassword' placeholder="Password Lama" onChange={handleChange} required />
                             </Form.Group>
                             <Form.Group as={Col} md="3" controlId="validationCustom03">
                                 <Form.Label>Password Baru</Form.Label>
-                                <Form.Control type="password" name='newPassword' placeholder="Password Baru" onBlur={handleChange} required isInvalid={isPasswordValid} />
+                                <Form.Control type="password" name='newPassword' placeholder="Password Baru" onChange={handleChange} required isInvalid={isPasswordValid} />
                                 <Form.Control.Feedback type="invalid">
                                     Masukan setidaknya 8 Karakter
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group as={Col} md="3" controlId="validationCustom03">
                                 <Form.Label>Konfirmasi Password Baru</Form.Label>
-                                <Form.Control type="password" name='confirmnewPassword' placeholder="Konfirmasi Password Baru" onBlur={handleChange} required isInvalid={isConfirmPasswordValid} />
+                                <Form.Control type="password" name='confirmnewPassword' placeholder="Konfirmasi Password Baru" onChange={handleChange} required isInvalid={isConfirmPasswordValid} />
                                 <Form.Control.Feedback type="invalid">
                                     Password tidak cocok
                                 </Form.Control.Feedback>

@@ -136,7 +136,7 @@ function InspectionApar1Monthly() {
             width: "20%"
         },
         {
-          name: 'Pemeriksa 1 Bulanan',
+          name: 'Pemeriksa Bulanan',
           cell: row => {
             const type1Checkers = row.location.checker.filter(checker => checker.checker_type === '1MONTHLY');
             return <>
@@ -155,7 +155,7 @@ function InspectionApar1Monthly() {
             sortable: true
         },
         {
-            name: 'Pemeriksaan 1 Bulanan Terakhir',
+            name: 'Pemeriksaan Bulanan Terakhir',
             selector: row => new Date(row.last_1montly_check_time).toLocaleString('id-ID', {
                 year: 'numeric',
                 month: 'numeric',
@@ -179,7 +179,7 @@ function InspectionApar1Monthly() {
                 },
               },
               {
-                when: row => {return differenceInDays(row.last_1montly_check_time) > 25 && differenceInDays(row.last_6montly_check_time) <= 30},
+                when: row => {return differenceInDays(row.last_1montly_check_time) > 25 && differenceInDays(row.last_1montly_check_time) <= 30},
                 style: {
                   backgroundColor: 'rgba(248, 148, 6, 0.9)',
                   color: 'white',
