@@ -77,7 +77,10 @@ function InspectionApar1Monthly() {
             return  (
                 row.apar_number.toLowerCase().includes(searchTerm) ||
                 row.apar_type.toLowerCase().includes(searchTerm) ||
-                row.location.location_name.toLowerCase().includes(searchTerm)
+                row.location.location_name.toLowerCase().includes(searchTerm) ||
+                row.location.checker.some(checker =>
+                  checker.checker_type === '1MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm)
+                )
             );
         })
         setRecord(newData)
@@ -124,19 +127,24 @@ function InspectionApar1Monthly() {
     
     const columns: TableColumn<DataRow>[] = [
         {
-            name: 'Nomor APAR',
+            name: <div>Nomor APAR</div>,
             selector: row => row.apar_number,
-            sortable: true,
-            width: "10%"
+            sortable: true
         },
         {
-            name: 'Lokasi',
+            name: <div>Lokasi</div>,
             selector: row => row.location.location_name,
-            sortable: true,
-            width: "20%"
+            sortable: true
         },
         {
-          name: 'Pemeriksa Bulanan',
+          name: <div>Pemeriksa Bulanan</div>,
+          selector: row => {
+            const type1Checkers = row.location.checker
+              .filter(checker => checker.checker_type === '1MONTHLY')
+              .map(checker => checker.user.name)
+              .join(', ');
+            return type1Checkers;
+          },
           cell: row => {
             const type1Checkers = row.location.checker.filter(checker => checker.checker_type === '1MONTHLY');
             return <>
@@ -146,8 +154,7 @@ function InspectionApar1Monthly() {
             </>
            
           },
-          sortable: true,
-          width: "12%",
+          sortable: true
         },
         {
             name: 'Tipe',
@@ -155,15 +162,16 @@ function InspectionApar1Monthly() {
             sortable: true
         },
         {
-            name: 'Pemeriksaan Bulanan Terakhir',
-            selector: row => new Date(row.last_1montly_check_time).toLocaleString('id-ID', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-              }),
+            name: <div>Pemeriksaan Bulanan Terakhir</div>,
+            selector: row => new Date(row.last_1montly_check_time).getTime(),
+            cell: row => <div>{new Date(row.last_1montly_check_time).toLocaleString('id-ID', {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric'
+            })}</div>,
             sortable: true,
             conditionalCellStyles: [
               {
@@ -201,15 +209,16 @@ function InspectionApar1Monthly() {
             ],
         },
         {
-            name: 'Pengisian Terakhir',
-            selector: row => new Date(row.last_filing_time).toLocaleString('id-ID', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-              }),
+            name: <div>Pengisian Terakhir</div>,
+            selector: row => new Date(row.last_filing_time).getTime(),
+            cell: row => <div>{new Date(row.last_filing_time).toLocaleString('id-ID', {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric'
+            })}</div>,
             sortable: true
         },
         actionColumn

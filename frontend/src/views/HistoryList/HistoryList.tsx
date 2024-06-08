@@ -105,42 +105,41 @@ function HistoryList() {
 
     const columns: TableColumn<DataRow>[] = [
         {
-            name: 'Nomor APAR',
+            name: <div>Nomor APAR</div>,
             selector: row => row.apar_number,
-            sortable: true,
-            width: "10%"
+            sortable: true
         },
         {
-            name: 'Lokasi',
+            name: <div>Lokasi</div>,
             selector: row => row.location.location_name,
-            sortable: true,
-            width: "20%"
+            sortable: true
         },
         {
-            name: 'Tipe',
+            name: <div>Tipe</div>,
             selector: row => row.apar_type,
             sortable: true
         },
         {
-            name: 'Pengisian Terakhir',
-            selector: row => new Date(row.last_filing_time).toLocaleString('id-ID', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-              }),
+            name: <div>Pengisian Terakhir</div>,
+            selector: row => new Date(row.last_filing_time).getTime(),
+            cell: row => <div>{new Date(row.last_filing_time).toLocaleString('id-ID', {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric'
+            })}</div>,
             sortable: true
         },
         {
-            name: 'Riwayat Semester',
+            name: <div>Riwayat Semester</div>,
             cell: row => <>
                           <Link to={`/history-6-monthly/${row.id}`}><Button variant="success" className='mx-1'><FontAwesomeIcon icon={faClipboard} /></Button></Link>
                         </>,
         },
         {
-            name: 'Riwayat Bulanan',
+            name: <div>Riwayat Bulanan</div>,
             cell: row => <>
                           <Link to={`/history-1-monthly/${row.id}`}><Button variant="success" className='mx-1'><FontAwesomeIcon icon={faClipboard} /></Button></Link>
                         </>,

@@ -194,7 +194,7 @@ function InfoApar() {
                                 <div className='col-12 align-self-center border-black border-bottom'>
                                     <h1 className='text-center fs-4 fw-normal'>Kartu Pemeriksaan Apar</h1>
                                 </div>
-                                <div className='col-8 p-2'>
+                                <div className='col-sm-8 col-12 p-2'>
                                     <table className="table table-striped">
                                         <tbody>
                                             <tr>
@@ -212,7 +212,7 @@ function InfoApar() {
                                         </tbody>
                                     </table>
                                 </div>
-                                <div className='col-4 p-2'>
+                                <div className='col-sm-4 col-12 p-2 align-self-center'>
                                     <QRCode value={`${domainFrontend}/apar/info/${aparData?.id}`} />
                                 </div>
                             </Row>

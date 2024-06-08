@@ -93,7 +93,13 @@ function ManageLocation() {
         const newData = locationData.filter( row => {
             const searchTerm = event.target.value.toLowerCase();
             return  (
-                row.location_name.toLowerCase().includes(searchTerm)
+                row.location_name.toLowerCase().includes(searchTerm) ||
+                row.checker.some(checker =>
+                  checker.checker_type === '6MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm) ||
+                  row.checker.some(checker =>
+                    checker.checker_type === '1MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm)
+                )
+              )
             );
         })
         setRecord(newData)
@@ -233,12 +239,20 @@ function ManageLocation() {
     
     const columns: TableColumn<DataRow>[] = [
         {
-            name: 'Lokasi',
+            name: <div>Lokasi</div>,
             selector: row => row.location_name,
             sortable: true
         },
         {
-          name: 'Pemeriksa Semester',
+          name: <div>Pemeriksa Semester</div>,
+          selector: row => {
+            const type1Checkers = row.checker
+              .filter(checker => checker.checker_type === '6MONTHLY')
+              .map(checker => checker.user.name)
+              .join(', ');
+        
+            return type1Checkers;
+          },
           cell: row => {
             const type1Checkers = row.checker.filter(checker => checker.checker_type === '6MONTHLY');
             return <>
@@ -251,7 +265,14 @@ function ManageLocation() {
           sortable: true
         },
         {
-          name: 'Pemeriksa Bulanan',
+          name: <div>Pemeriksa Bulanan</div>,
+          selector: row => {
+            const type1Checkers = row.checker
+              .filter(checker => checker.checker_type === '1MONTHLY')
+              .map(checker => checker.user.name)
+              .join(', ');
+            return type1Checkers;
+          },
           cell: row => {
             const type1Checkers = row.checker.filter(checker => checker.checker_type === '1MONTHLY');
             return <>
@@ -264,15 +285,16 @@ function ManageLocation() {
           sortable: true
         },
         {
-            name: 'Waltu Update',
-            selector: row => new Date(row.update_time).toLocaleString('id-ID', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-              }),
+            name: <div>Waktu Update</div>,
+            selector: row => new Date(row.update_time).getTime(),
+            cell: row => <div>{new Date(row.update_time).toLocaleString('id-ID', {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric'
+            })}</div>,
             sortable: true
         },
         actionColumn

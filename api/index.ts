@@ -38,6 +38,6 @@ setInterval(notification.notificationOnRepair, 24 * 60 * 60 * 1000)
 setInterval(notification.notificationToCheck6Montly, 24 * 60 * 60 * 1000)
 setInterval(notification.notificationToCheck1Montly, 24 * 60 * 60 * 1000)
 
-app.listen(8082, '0.0.0.0', () => {
+app.listen(Number(process.env.PORT ?? PORT), '0.0.0.0', () => {
   console.log(`Server is running on port ${process.env.PORT ?? PORT}`)
 })

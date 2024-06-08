@@ -191,7 +191,7 @@ function ManageAccount() {
                   </div>
                   <div className="col text-end">
                   {userRole === 'Admin' && (
-                    <Link to={"/account/add"}><Button variant="primary">Tambah User</Button></Link>
+                    <Link to={"/account/add"}><Button variant="primary">Tambah Akun</Button></Link>
                   )}
                   </div>
               </div>

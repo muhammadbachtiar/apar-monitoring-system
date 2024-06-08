@@ -103,7 +103,13 @@ function ManageApar() {
             return  (
                 row.apar_number.toLowerCase().includes(searchTerm) ||
                 row.apar_type.toLowerCase().includes(searchTerm) ||
-                row.location.location_name.toLowerCase().includes(searchTerm)
+                row.location.location_name.toLowerCase().includes(searchTerm) ||
+                row.location.checker.some(checker =>
+                  checker.checker_type === '6MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm) ||
+                  row.location.checker.some(checker =>
+                    checker.checker_type === '1MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm)
+                )
+              )
             );
         })
         setRecord(newData)
@@ -230,19 +236,27 @@ function ManageApar() {
     
     const columns: TableColumn<DataRow>[] = [
         {
-            name: 'Nomor APAR',
+            name: <div>Nomor APAR</div>,
             selector: row => row.apar_number,
             sortable: true,
             width: "10%"
         },
         {
-          name: 'Lokasi',
+          name: <div>Lokasi</div>,
           selector: row => row.location.location_name,
           sortable: true,
           width: "15%"
         },
         {
-          name: 'Pemeriksa Semester',
+          name: <div>Pemeriksa Semester</div>,
+          selector: row => {
+            const type1Checkers = row.location.checker
+              .filter(checker => checker.checker_type === '6MONTHLY')
+              .map(checker => checker.user.name)
+              .join(', ');
+        
+            return type1Checkers;
+          },
           cell: row => {
             const type1Checkers = row.location.checker.filter(checker => checker.checker_type === '6MONTHLY');
             return <>
@@ -256,7 +270,15 @@ function ManageApar() {
           width: "12%",
         },
         {
-          name: 'Pemeriksa Bulanan',
+          name:<div>Pemeriksa Bulanan</div>,
+          selector: row => {
+            const type1Checkers = row.location.checker
+              .filter(checker => checker.checker_type === '1MONTHLY')
+              .map(checker => checker.user.name)
+              .join(', ');
+        
+            return type1Checkers;
+          },
           cell: row => {
             const type1Checkers = row.location.checker.filter(checker => checker.checker_type === '1MONTHLY');
             return <>
@@ -275,7 +297,8 @@ function ManageApar() {
           sortable: true
         },
         {
-            name: 'Kondisi',
+            name: <div>Kondisi</div>,
+            selector: row => row.condition,
             cell: row =>(
                 row.condition ? 
                   <FontAwesomeIcon className='text-success' icon={faCheck} /> :
@@ -284,15 +307,20 @@ function ManageApar() {
             sortable: true,
         },
         {
-            name: 'Pengisian Terakhir',
-            selector: row => new Date(row.last_filing_time).toLocaleString('id-ID', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-              }),
+            name: <div>Pengisian Terakhir</div>,
+            selector: row => new Date(row.last_filing_time).getTime(),
+            cell: row => (
+              <div>
+                {new Date(row.last_filing_time).toLocaleString('id-ID', {
+                  year: 'numeric',
+                  month: 'numeric',
+                  day: 'numeric',
+                  hour: 'numeric',
+                  minute: 'numeric',
+                  second: 'numeric'
+                })}
+              </div>
+            ),
             sortable: true
         },
         {

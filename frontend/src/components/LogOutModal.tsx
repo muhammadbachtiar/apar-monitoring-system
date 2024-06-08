@@ -10,12 +10,10 @@ onHide: () => void
 
 function LogOutModal(props : Props) {
     const { logout } = useAuth();
-    const navigate = useNavigate();  // Gunakan useNavigate untuk navigasi
+    const navigate = useNavigate(); 
     const handleLogout = () => {
       logout
       localStorage.removeItem('token');
-      
-      // Mengalihkan pengguna ke halaman '/'
       navigate('/');
     };
   return (
@@ -36,7 +34,7 @@ function LogOutModal(props : Props) {
         </p>
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide}>Batal</Button>
+        <Button  variant="secondary" onClick={props.onHide}>Batal</Button>
         <Button onClick={handleLogout}>Keluar</Button>
       </Modal.Footer>
     </Modal>

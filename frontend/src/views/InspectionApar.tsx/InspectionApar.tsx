@@ -77,7 +77,10 @@ function InspectionApar() {
             return  (
                 row.apar_number.toLowerCase().includes(searchTerm) ||
                 row.apar_type.toLowerCase().includes(searchTerm) ||
-                row.location.location_name.toLowerCase().includes(searchTerm)
+                row.location.location_name.toLowerCase().includes(searchTerm) ||
+                row.location.checker.some(checker =>
+                  checker.checker_type === '6MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm)
+                )
             );
         })
         setRecord(newData)
@@ -123,19 +126,24 @@ function InspectionApar() {
     
     const columns: TableColumn<DataRow>[] = [
         {
-            name: 'Nomor APAR',
+            name: <div>Nomor APAR</div>,
             selector: row => row.apar_number,
             sortable: true,
-            width: "10%"
         },
         {
-            name: 'Lokasi',
+            name: <div>Lokasi</div>,
             selector: row => row.location.location_name,
             sortable: true,
-            width: "20%"
         },
         {
-          name: 'Pemeriksa Semester',
+          name: <div>Pemeriksa Semester</div>,
+          selector: row => {
+            const type1Checkers = row.location.checker
+              .filter(checker => checker.checker_type === '6MONTHLY')
+              .map(checker => checker.user.name)
+              .join(', ');
+            return type1Checkers;
+          },
           cell: row => {
             const type1Checkers = row.location.checker.filter(checker => checker.checker_type === '6MONTHLY');
             return <>
@@ -146,7 +154,6 @@ function InspectionApar() {
            
           },
           sortable: true,
-          width: "12%",
         },
         {
             name: 'Tipe',
@@ -154,15 +161,16 @@ function InspectionApar() {
             sortable: true
         },
         {
-            name: 'Pemeriksaan Semester Terakhir',
-            selector: row => new Date(row.last_6montly_check_time).toLocaleString('id-ID', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-              }),
+            name: <div>Pemeriksaan Semester Terakhir</div>,
+            selector: row => new Date(row.last_6montly_check_time).getTime(),
+            cell: row => <div>{new Date(row.last_6montly_check_time).toLocaleString('id-ID', {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric'
+            })}</div>,
             sortable: true,
             conditionalCellStyles: [
               {
@@ -200,15 +208,16 @@ function InspectionApar() {
             ],
         },
         {
-            name: 'Pengisian Terakhir',
-            selector: row => new Date(row.last_filing_time).toLocaleString('id-ID', {
-                year: 'numeric',
-                month: 'numeric',
-                day: 'numeric',
-                hour: 'numeric',
-                minute: 'numeric',
-                second: 'numeric'
-              }),
+            name: <div>Pengisian Terakhir</div>,
+            selector: row => new Date(row.last_filing_time).getTime(),
+            cell: row => <div>{new Date(row.last_filing_time).toLocaleString('id-ID', {
+              year: 'numeric',
+              month: 'numeric',
+              day: 'numeric',
+              hour: 'numeric',
+              minute: 'numeric',
+              second: 'numeric'
+            })}</div>,
             sortable: true
         },
         actionColumn
