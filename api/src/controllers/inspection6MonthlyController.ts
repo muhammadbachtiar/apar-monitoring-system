@@ -1,4 +1,4 @@
-import { InspectionModel } from '../models/inspection_6monthly'
+import { InspectionModel } from '../models/inspection'
 import { AparModel } from '../models/apar'
 import { type Request, type Response } from 'express'
 import differenceInMinutes from '../utils/diffrentMinuteTime'
@@ -14,7 +14,7 @@ const addInspection6Monthly = async (req: Request & { user?: any }, res: Respons
       result_check
     }: { id_apar: string, checker_name: string, result_check: string } = req.body
 
-    const checker_account_id: string = req.user.id
+    const id_checker_account: string = req.user.id
     const uploadeFiles = req.files
     const existingApar = await AparModel.query().findOne({ id: id_apar }).withGraphFetched('[location.[checker.[user]]]')
 
@@ -35,7 +35,7 @@ const addInspection6Monthly = async (req: Request & { user?: any }, res: Respons
     }
 
     const isAparChecker = existingApar.location?.checker?.some(checker => {
-      return checker.checker_type === '6MONTHLY' && checker.id_user === checker_account_id
+      return checker.checker_type === '6MONTHLY' && checker.id_user === id_checker_account
     })
 
     if (req.user.role !== 'Admin') {
@@ -73,7 +73,7 @@ const addInspection6Monthly = async (req: Request & { user?: any }, res: Respons
       documents: files,
       result_check: JSON.stringify(result_check),
       id_apar,
-      checker_account_id,
+      id_checker_account,
       status_check,
       checker_name,
       check_time: new Date(),
@@ -144,7 +144,7 @@ const updateInspection6Monthly = async (req: Request & { user?: any }, res: Resp
       documents
     }: { id_apar: string, checker_name: string, result_check: string, documents: string, deleted_documents: string } = req.body
     const inspectionId = req.params.id
-    const checker_account_id: string = req.user.id
+    const id_checker_account: string = req.user.id
     const uploadeFiles = req.files
 
     const existingInspection = await InspectionModel.query().findOne({ id: inspectionId })
@@ -157,7 +157,7 @@ const updateInspection6Monthly = async (req: Request & { user?: any }, res: Resp
       return
     }
 
-    const isAparChecker = existingInspection.checker_account_id === req.user.id
+    const isAparChecker = existingInspection.id_checker_account === req.user.id
 
     const existingApar = await AparModel.query().findOne({ id: id_apar })
 
@@ -220,7 +220,7 @@ const updateInspection6Monthly = async (req: Request & { user?: any }, res: Resp
 
     const status_check = JSON.parse(result_check).every((item: { part: string, status: boolean, note: string }) => item.status)
 
-    const inspection_result = await InspectionModel.query().patchAndFetchById(inspectionId, { result_check: JSON.stringify(result_check), documents: JSON.stringify(combinedArray), checker_account_id, status_check, checker_name, check_time: new Date() })
+    const inspection_result = await InspectionModel.query().patchAndFetchById(inspectionId, { result_check: JSON.stringify(result_check), documents: JSON.stringify(combinedArray), id_checker_account, status_check, checker_name, check_time: new Date() })
 
     await AparModel.query().patchAndFetchById(id_apar, { condition: status_check, last_6montly_check_time: new Date() })
 
@@ -247,7 +247,7 @@ const deleteInspection = async (req: Request & { user?: any }, res: Response): P
       return
     }
 
-    const isAparChecker = inspectionToDelete.checker_account_id === req.user.id
+    const isAparChecker = inspectionToDelete.id_checker_account === req.user.id
     if (req.user.role !== 'Admin') {
       if (!isAparChecker) {
         res.status(400).json({

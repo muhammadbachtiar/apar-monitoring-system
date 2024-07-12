@@ -1,6 +1,6 @@
 import { Model } from 'objection'
 import { LocationModel } from './location'
-import { InspectionModel } from './inspection_6monthly'
+import { InspectionModel } from './inspection'
 
 export class AparModel extends Model {
   id!: string

@@ -1,5 +1,6 @@
 import { LocationModel } from '../models/location'
 import { LocationCheckerModel } from '../models/location_checker'
+import { AparModel } from '../models/apar'
 import { type Request, type Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -188,13 +189,21 @@ const deleteLocation = async (req: Request & { location?: any }, res: Response):
   try {
     const locationId = req.params.id
     const data = req.body
-    console.log(data)
     const locationToDelete = await LocationModel.query().findById(locationId)
 
     if (!locationToDelete) {
       res.status(404).json({
         error: 'INVALID_ID',
         message: 'No location data found by that id'
+      })
+      return
+    }
+
+    const aparUsingLocation = await AparModel.query().where('id_location', locationId).first()
+    if (aparUsingLocation) {
+      res.status(400).json({
+        error: 'LOCATION_IN_USE',
+        message: `Cannot delete location because ${locationToDelete.location_name} is still used by some APARs`
       })
       return
     }

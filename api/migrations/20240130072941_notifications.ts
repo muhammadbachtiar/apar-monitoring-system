@@ -4,8 +4,8 @@ const TABLE_NAME = 'notifications'
 
 export async function up (knex: Knex): Promise<void> {
   await knex.schema.createTable(TABLE_NAME, (table) => {
-    table.string('id', 255).primary().unique()
-    table.string('id_user', 255).notNullable().references('id').inTable('users').onDelete('CASCADE')
+    table.uuid('id').primary().unique()
+    table.uuid('id_user').notNullable().references('id').inTable('users').onDelete('CASCADE')
     table.string('title', 255).notNullable()
     table.text('message').notNullable()
     table.boolean('status_read').defaultTo(false)

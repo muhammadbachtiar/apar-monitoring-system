@@ -15,7 +15,7 @@ type DataRow = {
     documents: [];
     result_check: string;
     id_apar: string;
-    checker_account_id: string;
+    id_checker_account: string;
     checker_name: string;
     status_check: boolean;
     check_time: string;
@@ -27,7 +27,7 @@ type InspectionData = {
     documents: [];
     result_check: string;
     id_apar: string;
-    checker_account_id: string;
+    id_checker_account: string;
     checker_name: string;
     status_check: boolean;
     check_time: string;

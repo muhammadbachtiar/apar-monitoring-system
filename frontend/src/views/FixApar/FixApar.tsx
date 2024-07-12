@@ -17,7 +17,7 @@ type Inspection = {
     documents: [];
     result_check: string;
     id_apar: string;
-    checker_account_id: string;
+    id_checker_account: string;
     checker_name: string;
     status_check: boolean;
     check_time: string;
@@ -65,7 +65,7 @@ function FixApar() {
         documents: [],
         result_check: '',
         id_apar: '',
-        checker_account_id: '',
+        id_checker_account: '',
         checker_name: '',
         status_check: false,
         check_time: '',
@@ -235,7 +235,7 @@ function FixApar() {
                                               documents: [],
                                               result_check: '',
                                               id_apar: '',
-                                              checker_account_id: '',
+                                              id_checker_account: '',
                                               checker_name: '',
                                               status_check: false,
                                               check_time: '',

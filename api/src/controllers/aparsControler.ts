@@ -1,4 +1,5 @@
 import { AparModel } from '../models/apar'
+import { InspectionModel } from '../models/inspection'
 import { type Request, type Response } from 'express'
 import { v4 as uuidv4 } from 'uuid'
 
@@ -199,10 +200,19 @@ const deleteApar = async (req: Request & { apar?: any }, res: Response): Promise
       return
     }
 
+    const inspectionUsingApar = await InspectionModel.query().where('id_apar', aparId).first()
+    if (inspectionUsingApar) {
+      res.status(400).json({
+        error: 'APAR_IN_USE',
+        message: `Cannot delete APAR ${aparToDelete.apar_number} because it is still used by some inspections`
+      })
+      return
+    }
+
     await AparModel.query().deleteById(aparId)
 
     res.status(200).json({
-      message: `Apar with number'${aparToDelete.apar_number}' deleted successfully`
+      message: `Apar with number '${aparToDelete.apar_number}' deleted successfully`
     })
   } catch (error: any) {
     console.log(error.message)

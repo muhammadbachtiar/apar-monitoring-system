@@ -6,7 +6,7 @@ export class InspectionModel extends Model {
   documents?: string
   result_check!: string
   id_apar!: string
-  checker_account_id!: string
+  id_checker_account!: string
   checker_name!: string
   status_check!: boolean
   check_time!: Date
@@ -19,7 +19,7 @@ export class InspectionModel extends Model {
       relation: Model.BelongsToOneRelation,
       modelClass: UserModel,
       join: {
-        from: 'inspection.checker_account_id',
+        from: 'inspection.id_checker_account',
         to: 'users.id'
       },
       modify: (query: any) => {

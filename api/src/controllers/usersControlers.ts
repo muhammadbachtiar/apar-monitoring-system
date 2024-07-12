@@ -1,4 +1,5 @@
 import { UserModel } from '../models/user'
+import { InspectionModel } from '../models/inspection'
 import { type Request, type Response } from 'express'
 import checkPassword from '../utils/checkPassword'
 import createToken from '../utils/createToken'
@@ -296,6 +297,15 @@ const deleteUser = async (req: Request & { user?: any }, res: Response): Promise
       res.status(404).json({
         error: 'INVALID_ID',
         message: 'No user data found by that id'
+      })
+      return
+    }
+
+    const inspectionUsingUser = await InspectionModel.query().where('id_checker_account', userId).first()
+    if (inspectionUsingUser) {
+      res.status(400).json({
+        error: 'USER_IN_USE',
+        message: `Cannot delete user ${userToDelete.name} because it is still used by some inspections`
       })
       return
     }
