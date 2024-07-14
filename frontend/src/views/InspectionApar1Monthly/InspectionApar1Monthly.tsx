@@ -79,7 +79,7 @@ function InspectionApar1Monthly() {
                 row.apar_type.toLowerCase().includes(searchTerm) ||
                 row.location.location_name.toLowerCase().includes(searchTerm) ||
                 row.location.checker.some(checker =>
-                  checker.checker_type === '1MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm)
+                  checker.checker_type === 'MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm)
                 )
             );
         })
@@ -140,13 +140,13 @@ function InspectionApar1Monthly() {
           name: <div>Pemeriksa Bulanan</div>,
           selector: row => {
             const type1Checkers = row.location.checker
-              .filter(checker => checker.checker_type === '1MONTHLY')
+              .filter(checker => checker.checker_type === 'MONTHLY')
               .map(checker => checker.user.name)
               .join(', ');
             return type1Checkers;
           },
           cell: row => {
-            const type1Checkers = row.location.checker.filter(checker => checker.checker_type === '1MONTHLY');
+            const type1Checkers = row.location.checker.filter(checker => checker.checker_type === 'MONTHLY');
             return <>
               <ListGroup as="ol" numbered>
                 { type1Checkers.map(checker =><><li>{checker.user.name}</li></>)}

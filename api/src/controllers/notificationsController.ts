@@ -34,9 +34,9 @@ const notificationToCheck6Montly = async (): Promise<void> => {
     for (const location of locationData) {
       const ApartoCheck = await AparModel.query().where('id_location', location.id).where('condition', true).where('last_6montly_check_time', '<', currentDate).orderBy('last_6montly_check_time', 'desc')
       if (ApartoCheck.length > 0) {
-        const checkerData = await LocationCheckerModel.query().where('checker_type', '6MONTHLY').where('id_location', location.id)
+        const checkerData = await LocationCheckerModel.query().where('checker_type', 'SEMESTER').where('id_location', location.id)
         for (const userChecker of checkerData) {
-          await saveNotificationToCheck(ApartoCheck.length, location.location_name, 'semesteran', userChecker.id_user)
+          await saveNotificationToCheck(ApartoCheck.length, location.location_name, 'SEMESTER', userChecker.id_user)
         }
       }
     }
@@ -58,9 +58,9 @@ const notificationToCheck1Montly = async (): Promise<void> => {
     for (const location of locationData) {
       const ApartoCheck = await AparModel.query().where('id_location', location.id).where('condition', true).where('last_1montly_check_time', '<', currentDate).orderBy('last_1montly_check_time', 'desc')
       if (ApartoCheck.length > 0) {
-        const checkerData = await LocationCheckerModel.query().where('checker_type', '1MONTHLY').where('id_location', location.id)
+        const checkerData = await LocationCheckerModel.query().where('checker_type', 'MONTHLY').where('id_location', location.id)
         for (const userChecker of checkerData) {
-          await saveNotificationToCheck(ApartoCheck.length, location.location_name, 'bulanan', userChecker.id_user)
+          await saveNotificationToCheck(ApartoCheck.length, location.location_name, 'MONTHLY', userChecker.id_user)
         }
       }
     }
@@ -97,8 +97,17 @@ const saveNotification = async (message: number, id_user: string): Promise<void>
 }
 
 const saveNotificationToCheck = async (message: number, locationName: string, checkType: string, id_user: string): Promise<void> => {
-  const notificationMessage = `Terdapat ${message} APAR yang perlu dilakukan pemeriksaan ${checkType} di lokasi ${locationName}. Segera lakukan pemeriksaan pada APAR.`
-  const title = `Peringatan Pemeriksaan APAR ${checkType}`
+  let notificationMessage = ''
+  let title = ''
+
+  if (checkType === 'MONTHLY') {
+    notificationMessage = `Terdapat ${message} APAR yang perlu dilakukan pemeriksaan bulanan di lokasi ${locationName}. Segera lakukan pemeriksaan pada APAR.`
+    title = 'Peringatan Pemeriksaan APAR Bulanan'
+  } else if (checkType === 'SEMESTER') {
+    notificationMessage = `Terdapat ${message} APAR yang perlu dilakukan pemeriksaan semester di lokasi ${locationName}. Segera lakukan pemeriksaan pada APAR.`
+    title = 'Peringatan Pemeriksaan APAR Semester'
+  }
+
   try {
     const lastNotification = await NotificationModel.query()
       .where({ message: `${notificationMessage}`, id_user, title, status_read: false })

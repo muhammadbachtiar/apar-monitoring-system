@@ -132,7 +132,7 @@ function InfoApar() {
                                                 Pemeriksa :
                                                 {
                                                     aparData?.location.checker
-                                                        .filter(checker => checker.checker_type === '6MONTHLY')
+                                                        .filter(checker => checker.checker_type === 'SEMESTER')
                                                         .map((checker, index, array) => (
                                                             <span key={checker.id}>
                                                              {checker.user.name}
@@ -162,7 +162,7 @@ function InfoApar() {
                                                 Pemeriksa :
                                                 {
                                                     aparData?.location.checker
-                                                        .filter(checker => checker.checker_type === '1MONTHLY')
+                                                        .filter(checker => checker.checker_type === 'MONTHLY')
                                                         .map((checker, index, array) => (
                                                             <span key={checker.id}>
                                                             {checker.user.name}

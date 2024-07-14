@@ -6,10 +6,10 @@ export async function up (knex: Knex): Promise<void> {
   await knex.schema.createTable(TABLE_NAME, (table) => {
     table.uuid('id').primary().unique()
     table.uuid('id_user').notNullable().references('id').inTable('users').onDelete('CASCADE')
-    table.string('title', 255).notNullable()
+    table.string('title', 36).notNullable()
     table.text('message').notNullable()
     table.boolean('status_read').defaultTo(false)
-    table.string('notification_type', 255).notNullable()
+    table.string('notification_type', 36).notNullable()
     table.timestamp('timestamp').defaultTo(knex.fn.now())
   })
 }

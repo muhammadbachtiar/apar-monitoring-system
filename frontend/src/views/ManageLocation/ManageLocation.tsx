@@ -95,9 +95,9 @@ function ManageLocation() {
             return  (
                 row.location_name.toLowerCase().includes(searchTerm) ||
                 row.checker.some(checker =>
-                  checker.checker_type === '6MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm) ||
+                  checker.checker_type === 'SEMESTER' && checker.user.name.toLowerCase().includes(searchTerm) ||
                   row.checker.some(checker =>
-                    checker.checker_type === '1MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm)
+                    checker.checker_type === 'MONTHLY' && checker.user.name.toLowerCase().includes(searchTerm)
                 )
               )
             );
@@ -138,8 +138,8 @@ function ManageLocation() {
     };
 
     const handleButtonClick = (row: DataRow) => {
-      const checker1Monthly = row.checker.filter(checker => checker.checker_type === '1MONTHLY');
-      const checker6Monthly = row.checker.filter(checker => checker.checker_type === '6MONTHLY');
+      const checker1Monthly = row.checker.filter(checker => checker.checker_type === 'MONTHLY');
+      const checker6Monthly = row.checker.filter(checker => checker.checker_type === 'SEMESTER');
       const checker1MonthlyArrayId = checker1Monthly.map(data => data.id_user)
       const checker6MonthlyArrayId = checker6Monthly.map(data => data.id_user)
 
@@ -247,14 +247,14 @@ function ManageLocation() {
           name: <div>Pemeriksa Semester</div>,
           selector: row => {
             const type1Checkers = row.checker
-              .filter(checker => checker.checker_type === '6MONTHLY')
+              .filter(checker => checker.checker_type === 'SEMESTER')
               .map(checker => checker.user.name)
               .join(', ');
         
             return type1Checkers;
           },
           cell: row => {
-            const type1Checkers = row.checker.filter(checker => checker.checker_type === '6MONTHLY');
+            const type1Checkers = row.checker.filter(checker => checker.checker_type === 'SEMESTER');
             return <>
               <ListGroup as="ol" numbered>
                 { type1Checkers.map(checker =><><li>{checker.user.name}</li></>)}
@@ -268,13 +268,13 @@ function ManageLocation() {
           name: <div>Pemeriksa Bulanan</div>,
           selector: row => {
             const type1Checkers = row.checker
-              .filter(checker => checker.checker_type === '1MONTHLY')
+              .filter(checker => checker.checker_type === 'MONTHLY')
               .map(checker => checker.user.name)
               .join(', ');
             return type1Checkers;
           },
           cell: row => {
-            const type1Checkers = row.checker.filter(checker => checker.checker_type === '1MONTHLY');
+            const type1Checkers = row.checker.filter(checker => checker.checker_type === 'MONTHLY');
             return <>
               <ListGroup as="ol" numbered>
                 { type1Checkers.map(checker =><><li>{checker.user.name}</li></>)}

@@ -42,7 +42,7 @@ const addLocation = async (req: Request, res: Response): Promise<void> => {
           id: uuidv4(),
           id_user,
           id_location: registeredLocation.id,
-          checker_type: '6MONTHLY'
+          checker_type: 'SEMESTER'
         })
       }
 
@@ -51,7 +51,7 @@ const addLocation = async (req: Request, res: Response): Promise<void> => {
           id: uuidv4(),
           id_user,
           id_location: registeredLocation.id,
-          checker_type: '1MONTHLY'
+          checker_type: 'MONTHLY'
         })
       }
 
@@ -123,7 +123,7 @@ const updateLocation = async (req: Request & { location?: any }, res: Response):
       return
     }
     const currentChecker6Monthly: string[] = data.data.checker_6monthly
-    const prevChecker6Monthly = (locationToUpdate?.checker ?? []).filter(checker => checker.checker_type === '6MONTHLY')
+    const prevChecker6Monthly = (locationToUpdate?.checker ?? []).filter(checker => checker.checker_type === 'SEMESTER')
     const currentChecker6MonthlyNew = currentChecker6Monthly?.filter((checker) => !prevChecker6Monthly.map(checker => checker.id_user).includes(checker))
     const currentChecker6MonthlyDeleted = prevChecker6Monthly.map(checker => checker.id_user).filter((checker) => !currentChecker6Monthly.includes(checker))
     if (currentChecker6MonthlyDeleted && currentChecker6MonthlyDeleted.length > 0) {
@@ -132,7 +132,7 @@ const updateLocation = async (req: Request & { location?: any }, res: Response):
           await LocationCheckerModel.query().delete().where({
             id_location: locationToUpdate.id,
             id_user: deletedCheckerId,
-            checker_type: '6MONTHLY'
+            checker_type: 'SEMESTER'
           })
         })
       )
@@ -143,14 +143,14 @@ const updateLocation = async (req: Request & { location?: any }, res: Response):
         id: uuidv4(),
         id_user: newCheckerId,
         id_location: locationToUpdate.id,
-        checker_type: '6MONTHLY'
+        checker_type: 'SEMESTER'
       }))
       console.log(insertData)
       await LocationCheckerModel.query().insert(insertData)
     }
 
     const currentChecker1Monthly: string[] = data.data.checker_1monthly
-    const prevChecker1Monthly = (locationToUpdate?.checker ?? []).filter(checker => checker.checker_type === '1MONTHLY')
+    const prevChecker1Monthly = (locationToUpdate?.checker ?? []).filter(checker => checker.checker_type === 'MONTHLY')
     const currentChecker1MonthlyNew = currentChecker1Monthly?.filter((checker) => !prevChecker1Monthly.map(checker => checker.id_user).includes(checker))
     const currentChecker1MonthlyDeleted = prevChecker1Monthly.map(checker => checker.id_user).filter((checker) => !currentChecker1Monthly.includes(checker))
     if (currentChecker1MonthlyDeleted && currentChecker1MonthlyDeleted.length > 0) {
@@ -159,7 +159,7 @@ const updateLocation = async (req: Request & { location?: any }, res: Response):
           await LocationCheckerModel.query().delete().where({
             id_location: locationToUpdate.id,
             id_user: deletedCheckerId,
-            checker_type: '1MONTHLY'
+            checker_type: 'MONTHLY'
           })
         })
       )
@@ -170,7 +170,7 @@ const updateLocation = async (req: Request & { location?: any }, res: Response):
         id: uuidv4(),
         id_user: newCheckerId,
         id_location: locationToUpdate.id,
-        checker_type: '1MONTHLY'
+        checker_type: 'MONTHLY'
       }))
       await LocationCheckerModel.query().insert(insertData)
     }

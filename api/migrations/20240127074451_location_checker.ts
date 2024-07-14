@@ -7,7 +7,7 @@ export async function up (knex: Knex): Promise<void> {
     table.uuid('id').primary().unique()
     table.uuid('id_user').notNullable().references('id').inTable('users').onDelete('CASCADE')
     table.uuid('id_location').notNullable().references('id').inTable('locations').onDelete('CASCADE')
-    table.string('checker_type', 255).notNullable()
+    table.string('checker_type', 16).notNullable()
   })
 }
 

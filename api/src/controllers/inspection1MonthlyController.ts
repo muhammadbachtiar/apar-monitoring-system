@@ -35,7 +35,7 @@ const addInspection1Monthly = async (req: Request & { user?: any }, res: Respons
     }
 
     const isAparChecker = existingApar.location?.checker?.some(checker => {
-      return checker.checker_type === '1MONTHLY' && checker.id_user === id_checker_account
+      return checker.checker_type === 'MONTHLY' && checker.id_user === id_checker_account
     })
 
     if (req.user.role !== 'Admin') {
@@ -77,7 +77,7 @@ const addInspection1Monthly = async (req: Request & { user?: any }, res: Respons
       status_check,
       checker_name,
       check_time: new Date(),
-      inspection_type: '1 MONTHLY INSPECTION'
+      inspection_type: 'MONTHLY'
     }).returning('*')
 
     await AparModel.query().patchAndFetchById(id_apar, { condition: status_check, last_1montly_check_time: new Date() })
@@ -115,7 +115,7 @@ const getInspectionById = async (req: Request, res: Response): Promise<void> => 
 }
 
 const getAllInspection = async (req: Request, res: Response): Promise<void> => {
-  let query = InspectionModel.query().withGraphFetched('[user]').where('inspection_type', '1 MONTHLY INSPECTION')
+  let query = InspectionModel.query().withGraphFetched('[user]').where('inspection_type', 'MONTHLY')
 
   try {
     const conditionParam = req.query.id_apar as string | undefined
@@ -278,7 +278,7 @@ const deleteInspection = async (req: Request & { user?: any }, res: Response): P
 
     const lastInspection1Monthly = await InspectionModel.query()
       .where('id_apar', inspectionToDelete.id_apar)
-      .where('inspection_type', '1 MONTHLY INSPECTION')
+      .where('inspection_type', 'MONTHLY')
       .orderBy('check_time', 'desc')
       .first()
 
