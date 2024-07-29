@@ -200,7 +200,7 @@ function AddApar() {
                                                         classNamePrefix="Lokasi"
                                                         isSearchable={false}
                                                         isClearable={true}
-                                                        options={[{value:"POWEDER", label:"Poweder"},{value:"HALOTRON", label:"Halotron"},{value:"CO2", label:"Co2"}]}
+                                                        options={[{value:"POWDER", label:"Powder"},{value:"HALOTRON", label:"Halotron"},{value:"CO2", label:"Co2"},{value:"FOAM", label:"Foam"}]}
                                                         onChange={(selectedOption) =>
                                                             handleSelectChange(selectedOption, 'apar_type', index)
                                                           }

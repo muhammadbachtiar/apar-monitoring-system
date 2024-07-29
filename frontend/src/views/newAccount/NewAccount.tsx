@@ -5,6 +5,7 @@ import domainApi from '../../services/config/domainApi';
 
 function AddAccount() {
     const navigate = useNavigate();
+    const [isNameValid, setIsNameValid] = useState(false);
     const [isUsernameValid, setIsUsernameValid] = useState(false);
     const [isPasswordValid, setIsPasswordValid] = useState(false);
     const [isConfirmPasswordValid, setIsConfirmPasswordValid] = useState(false);
@@ -17,6 +18,10 @@ function AddAccount() {
     const handleChange = (event: { target: {name: string, value: string }; }) => {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
+        if (name === "name") {
+          setIsNameValid(Boolean(value.length < 3 || value.length > 52));
+        }
+
         if (name === "username") {
           setIsUsernameValid(Boolean(value.length <= 7));
         }
@@ -118,7 +123,11 @@ function AddAccount() {
                                         name='name'
                                         placeholder="Nama Pengguna"
                                         onBlur={handleChange}
+                                        isInvalid={isNameValid}
                                     />
+                                    <Form.Control.Feedback type="invalid">
+                                      Yakin sudah memasukkan nama dengan benar?
+                                    </Form.Control.Feedback>
                                 </Form.Group>
                                 <Form.Group as={Col} md="4" controlId="validationCustomUsername">
                                     <Form.Label>Username</Form.Label>
@@ -133,7 +142,7 @@ function AddAccount() {
                                         isInvalid={isUsernameValid}
                                         />
                                         <Form.Control.Feedback type="invalid">
-                                            Masukan setidaknya 8 Karakter
+                                            Masukkan setidaknya 8 Karakter
                                         </Form.Control.Feedback>
                                     </InputGroup>
                                 </Form.Group>
@@ -155,7 +164,7 @@ function AddAccount() {
                                     <Form.Label>Password</Form.Label>
                                     <Form.Control type="password" name='password' placeholder="Password" onBlur={handleChange} required isInvalid={isPasswordValid} />
                                     <Form.Control.Feedback type="invalid">
-                                        Masukan setidaknya 8 Karakter
+                                        Masukkan password yang lebih kuat
                                     </Form.Control.Feedback>
                                 </Form.Group>
                                 <Form.Group as={Col} md="3" controlId="validationCustom03">

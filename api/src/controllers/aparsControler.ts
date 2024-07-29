@@ -1,7 +1,7 @@
 import { AparModel } from '../models/apar'
 import { InspectionModel } from '../models/inspection'
 import { type Request, type Response } from 'express'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid'
 
 const addApar = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -26,12 +26,36 @@ const addApar = async (req: Request, res: Response): Promise<void> => {
     const registeredApars = []
     for (const apar of apars) {
       const { apar_number, id_location, apar_type, condition, check_6monthly, check_1monthly, last_filing_time } = apar
+      if (apar_number.length < 4) {
+        res.status(400).json({
+          error: 'INVALID_APAR_NUMBER',
+          message: 'APAR number must be at least 4 characters long.'
+        })
+        return
+      }
+
       const existingApar = await AparModel.query().findOne({ apar_number })
 
       if (existingApar) {
         res.status(400).json({
           error: 'INVALID_APAR_NUMBER',
-          message: `Apar '${apar_number}' is already exists. Please use a different apar.`
+          message: `APAR '${apar_number}' is already exists. Please use a different apar.`
+        })
+        return
+      }
+
+      if (!uuidValidate(id_location)) {
+        res.status(400).json({
+          error: 'INVALID_ID_LOCATION',
+          message: 'The provided ID is not a valid UUID.'
+        })
+        return
+      }
+
+      if (apar_type.length <= 0) {
+        res.status(400).json({
+          error: 'INVALID_APAR_TYPE',
+          message: 'Make sure APAR type is valid.'
         })
         return
       }
@@ -64,6 +88,15 @@ const addApar = async (req: Request, res: Response): Promise<void> => {
 
 const getAparById = async (req: Request, res: Response): Promise<void> => {
   const aparId = req.params.id
+
+  if (!uuidValidate(aparId)) {
+    res.status(400).json({
+      error: 'INVALID_ID',
+      message: 'The provided ID is not a valid UUID.'
+    })
+    return
+  }
+
   const filterById = await AparModel.query().findById(aparId).withGraphFetched('[location.[checker.[user]]]')
 
   if (filterById === null || filterById === undefined) {
@@ -124,6 +157,13 @@ const updateApar = async (req: Request & { apar?: any }, res: Response): Promise
     last_filing_time: string
   }
   const aparIdToUpdate = req.params.id
+  if (!uuidValidate(aparIdToUpdate)) {
+    res.status(400).json({
+      error: 'INVALID_ID',
+      message: 'The provided ID is not a valid UUID.'
+    })
+    return
+  }
   try {
     const aparToUpdate = await AparModel.query().findById(aparIdToUpdate)
     if (aparToUpdate === null || aparToUpdate === undefined) {
@@ -132,10 +172,41 @@ const updateApar = async (req: Request & { apar?: any }, res: Response): Promise
     }
 
     const { apar_number, id_location, apar_type, condition, check_6monthly, check_1monthly, last_filing_time }: RequestBodyType = req.body
+    if (apar_number.length < 4) {
+      res.status(400).json({
+        error: 'INVALID_APAR_NUMBER',
+        message: 'APAR number must be at least 4 characters long.'
+      })
+      return
+    }
 
-    await AparModel.query().patchAndFetchById(aparIdToUpdate, { id_location, apar_type, condition, last_6montly_check_time: new Date(check_6monthly), last_1montly_check_time: new Date(check_1monthly), last_filing_time: new Date(last_filing_time) })
+    if (apar_number && apar_number !== aparToUpdate.apar_number) {
+      const existingApar = await AparModel.query().findOne({ apar_number })
+      if (existingApar) {
+        res.status(400).json({
+          error: 'INVALID_APAR_NUMBER',
+          message: `Apar '${apar_number}' is already exists. Please use a different apar number.`
+        })
+        return
+      }
+    }
+    if (!uuidValidate(id_location)) {
+      res.status(400).json({
+        error: 'INVALID_ID_LOCATION',
+        message: 'The provided ID is not a valid UUID.'
+      })
+      return
+    }
+    if (apar_type.length <= 0) {
+      res.status(400).json({
+        error: 'INVALID_APAR_TYPE',
+        message: 'Make sure APAR type is valid.'
+      })
+      return
+    }
+    await AparModel.query().patchAndFetchById(aparIdToUpdate, { apar_number, id_location, apar_type, condition, last_6montly_check_time: new Date(check_6monthly), last_1montly_check_time: new Date(check_1monthly), last_filing_time: new Date(last_filing_time) })
     res.status(200).json({
-      message: `Success Update "${apar_number}" APAR Data`
+      message: 'Success Update APAR Data'
     })
   } catch (error: any) {
     console.log(error.message)
@@ -190,6 +261,13 @@ const fixApar = async (req: Request & { apar?: any }, res: Response): Promise<vo
 const deleteApar = async (req: Request & { apar?: any }, res: Response): Promise<void> => {
   try {
     const aparId = req.params.id
+    if (!uuidValidate(aparId)) {
+      res.status(400).json({
+        error: 'INVALID_ID',
+        message: 'The provided ID is not a valid UUID.'
+      })
+      return
+    }
     const aparToDelete = await AparModel.query().findById(aparId)
 
     if (!aparToDelete) {

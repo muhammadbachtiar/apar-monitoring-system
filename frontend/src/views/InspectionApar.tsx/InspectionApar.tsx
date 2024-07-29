@@ -127,13 +127,15 @@ function InspectionApar() {
     const columns: TableColumn<DataRow>[] = [
         {
             name: <div>Nomor APAR</div>,
+            cell: row => <div>{row.apar_number}</div>,
             selector: row => row.apar_number,
-            sortable: true,
+            sortable: true
         },
         {
             name: <div>Lokasi</div>,
+            cell: row => <div>{row.location.location_name}</div>,
             selector: row => row.location.location_name,
-            sortable: true,
+            sortable: true
         },
         {
           name: <div>Pemeriksa Semester</div>,

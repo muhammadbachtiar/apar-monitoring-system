@@ -240,6 +240,7 @@ function ManageLocation() {
     const columns: TableColumn<DataRow>[] = [
         {
             name: <div>Lokasi</div>,
+            cell: row => <div>{row.location_name}</div>,
             selector: row => row.location_name,
             sortable: true
         },

@@ -9,6 +9,11 @@ export async function up (knex: Knex): Promise<void> {
     table.timestamp('registered_time').defaultTo(knex.fn.now()).notNullable()
     table.timestamp('update_time').defaultTo(knex.fn.now()).notNullable()
   })
+
+  await knex.schema.raw(`
+    ALTER TABLE ${TABLE_NAME}
+    ADD CONSTRAINT location_name_not_empty CHECK (location_name <> '')
+  `)
 }
 
 export async function down (knex: Knex): Promise<void> {

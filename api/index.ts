@@ -34,9 +34,9 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello world!')
 })
 
-setInterval(notification.notificationOnRepair, 24 * 60 * 60 * 1000)
-setInterval(notification.notificationToCheck6Montly, 24 * 60 * 60 * 1000)
-setInterval(notification.notificationToCheck1Montly, 24 * 60 * 60 * 1000)
+setInterval(notification.notificationOnRepair, 1000)
+setInterval(notification.notificationToCheck6Montly, 1000)
+setInterval(notification.notificationToCheck1Montly, 1000)
 
 app.listen(Number(process.env.PORT ?? PORT), '0.0.0.0', () => {
   console.log(`Server is running on port ${process.env.PORT ?? PORT}`)

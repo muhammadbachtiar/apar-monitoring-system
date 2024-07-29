@@ -4,7 +4,9 @@ import { type Request, type Response } from 'express'
 import differenceInMinutes from '../utils/diffrentMinuteTime'
 import UploadMultipleFile from '../utils/uploadMultipleFile'
 import cloudinaryDelete from '../utils/cloudinaryDelete'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid'
+
+const namePattern = /^[a-zA-Z\s]+$/
 
 const addInspection1Monthly = async (req: Request & { user?: any }, res: Response): Promise<void> => {
   try {
@@ -16,6 +18,15 @@ const addInspection1Monthly = async (req: Request & { user?: any }, res: Respons
 
     const id_checker_account: string = req.user.id
     const uploadeFiles = req.files
+
+    if (!uuidValidate(id_apar)) {
+      res.status(400).json({
+        error: 'INVALID_ID_APAR',
+        message: 'The provided ID is not a valid UUID.'
+      })
+      return
+    }
+
     const existingApar = await AparModel.query().findOne({ id: id_apar }).withGraphFetched('[location.[checker.[user]]]')
 
     if (!existingApar) {
@@ -46,6 +57,14 @@ const addInspection1Monthly = async (req: Request & { user?: any }, res: Respons
         })
         return
       }
+    }
+
+    if (checker_name.length < 3 || !namePattern.test(checker_name)) {
+      res.status(400).json({
+        error: 'INVALID_CHECKER_NAME',
+        message: 'Make sure checker name is valid.'
+      })
+      return
     }
 
     const uniqueId = uuidv4()
@@ -95,6 +114,15 @@ const addInspection1Monthly = async (req: Request & { user?: any }, res: Respons
 
 const getInspectionById = async (req: Request, res: Response): Promise<void> => {
   const inspectionId = req.params.id
+
+  if (!uuidValidate(inspectionId)) {
+    res.status(400).json({
+      error: 'INVALID_ID',
+      message: 'The provided ID is not a valid UUID.'
+    })
+    return
+  }
+
   try {
     const filterById = await InspectionModel.query().withGraphFetched('[user]').findById(inspectionId)
     if (filterById === null || filterById === undefined) {
@@ -143,6 +171,23 @@ const updateInspection1Monthly = async (req: Request & { user?: any }, res: Resp
       deleted_documents,
       documents
     }: { id_apar: string, checker_name: string, result_check: string, documents: string, deleted_documents: string } = req.body
+
+    if (!uuidValidate(id_apar)) {
+      res.status(400).json({
+        error: 'INVALID_APAR_ID',
+        message: 'The provided ID is not a valid UUID.'
+      })
+      return
+    }
+
+    if (checker_name.length < 3 || !namePattern.test(checker_name)) {
+      res.status(400).json({
+        error: 'INVALID_CHECKER_NAME',
+        message: 'Make sure checker name is valid.'
+      })
+      return
+    }
+
     const inspectionId = req.params.id
     const id_checker_account: string = req.user.id
     const uploadeFiles = req.files
@@ -237,6 +282,15 @@ const updateInspection1Monthly = async (req: Request & { user?: any }, res: Resp
 const deleteInspection = async (req: Request & { user?: any }, res: Response): Promise<void> => {
   try {
     const inspectionId = req.params.id
+
+    if (!uuidValidate(inspectionId)) {
+      res.status(400).json({
+        error: 'INVALID_APAR_ID',
+        message: 'The provided ID is not a valid UUID.'
+      })
+      return
+    }
+
     const inspectionToDelete = await InspectionModel.query().findById(inspectionId)
 
     if (!inspectionToDelete) {

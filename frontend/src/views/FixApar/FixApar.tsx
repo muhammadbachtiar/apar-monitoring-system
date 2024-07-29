@@ -191,6 +191,7 @@ function FixApar() {
         },
         {
             name: <div>Lokasi</div>,
+            cell: row => <div>{row.location.location_name}</div>,
             selector: row => row.location.location_name,
             sortable: true
         },

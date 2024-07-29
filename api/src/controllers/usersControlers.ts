@@ -4,7 +4,10 @@ import { type Request, type Response } from 'express'
 import checkPassword from '../utils/checkPassword'
 import createToken from '../utils/createToken'
 import bcrypt from 'bcrypt'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid'
+
+const emailPattern = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/
+const namePattern = /^[a-zA-Z\s]+$/
 
 const login = async (req: Request, res: Response): Promise<void> => {
   const username: string = String(req.body.username).toLowerCase()
@@ -55,7 +58,39 @@ const register = async (req: Request, res: Response): Promise<void> => {
   const password: string = req.body.password
   const email: string = req.body.email
   const name: string = req.body.name
-  const role: Enumerator = req.body.role
+  const role: Enumerator<['Admin', 'Viewer', 'Checker']> = req.body.role
+
+  if (username.length < 8) {
+    res.status(400).json({
+      error: 'INVALID_USERNAME',
+      message: 'Username must be at least 8 characters long.'
+    })
+    return
+  }
+
+  if (!emailPattern.test(email)) {
+    res.status(400).json({
+      error: 'INVALID_EMAIL',
+      message: 'Email format is invalid. Please use a valid email.'
+    })
+    return
+  }
+
+  if (password.length < 8) {
+    res.status(400).json({
+      error: 'INVALID_PASSWORD',
+      message: 'Password must be at least 8 characters long.'
+    })
+    return
+  }
+
+  if (name.length < 3 || !namePattern.test(name)) {
+    res.status(400).json({
+      error: 'INVALID_NAME',
+      message: 'Make sure name is valid.'
+    })
+    return
+  }
 
   const existingUser = await UserModel.query().findOne({ username })
 
@@ -66,6 +101,7 @@ const register = async (req: Request, res: Response): Promise<void> => {
     })
     return
   }
+
   const existingEmail = await UserModel.query().findOne({ email })
 
   if (existingEmail) {
@@ -106,6 +142,15 @@ const authUserInfo = async (req: Request & { user?: any }, res: Response): Promi
 
 const getUserById = async (req: Request, res: Response): Promise<void> => {
   const userId = req.params.id
+
+  if (!uuidValidate(userId)) {
+    res.status(400).json({
+      error: 'INVALID_ID',
+      message: 'The provided ID is not a valid UUID.'
+    })
+    return
+  }
+
   const filterById = await UserModel.query().findById(userId)
 
   if (filterById === null || filterById === undefined) {
@@ -139,6 +184,15 @@ const updateUser = async (req: Request & { user?: any }, res: Response): Promise
     name: string
   }
   const userIdToUpdate = req.params.id
+
+  if (!uuidValidate(userIdToUpdate)) {
+    res.status(400).json({
+      error: 'INVALID_ID',
+      message: 'The provided ID is not a valid UUID.'
+    })
+    return
+  }
+
   try {
     const userToUpdate = await UserModel.query().findById(userIdToUpdate)
     const { email, password, name, role }: RequestBodyType = req.body
@@ -149,6 +203,14 @@ const updateUser = async (req: Request & { user?: any }, res: Response): Promise
     }
 
     if (email && email !== userToUpdate.email) {
+      if (!emailPattern.test(email)) {
+        res.status(400).json({
+          error: 'INVALID_EMAIL',
+          message: 'Email format is invalid. Please use a valid email.'
+        })
+        return
+      }
+
       const existingEmail = await UserModel.query().findOne({ email })
       if (existingEmail) {
         res.status(400).json({
@@ -161,6 +223,13 @@ const updateUser = async (req: Request & { user?: any }, res: Response): Promise
     }
 
     if (password) {
+      if (password.length < 8) {
+        res.status(400).json({
+          error: 'INVALID_PASSWORD',
+          message: 'Password must be at least 8 characters long.'
+        })
+        return
+      }
       const isPasswordCorrect = await checkPassword(
         userToUpdate.password,
         password
@@ -178,10 +247,10 @@ const updateUser = async (req: Request & { user?: any }, res: Response): Promise
       await UserModel.query().patchAndFetchById(userIdToUpdate, { password: hashedPassword })
     }
     if (name && name !== userToUpdate.name) {
-      if (name.length < 3 || name.length > 25) {
+      if (name.length < 3 || !namePattern.test(name)) {
         res.status(400).json({
-          error: 'INVALID_NEW_NAME',
-          message: 'The name must consist of between 3 to 25 characters'
+          error: 'INVALID_NAME',
+          message: 'Make sure name is valid.'
         })
         return
       }
@@ -221,6 +290,14 @@ const updateProfile = async (req: Request & { user?: any }, res: Response): Prom
     }
 
     if (email) {
+      if (!emailPattern.test(email)) {
+        res.status(400).json({
+          error: 'INVALID_EMAIL',
+          message: 'Email format is invalid. Please use a valid email.'
+        })
+        return
+      }
+
       const existingEmail = await UserModel.query().findOne({ email })
       if (existingEmail) {
         res.status(400).json({
@@ -262,6 +339,14 @@ const updateProfile = async (req: Request & { user?: any }, res: Response): Prom
         })
         return
       }
+
+      if (newPassword.length < 8) {
+        res.status(400).json({
+          error: 'INVALID_NEW_PASSWORD',
+          message: 'New password must be at least 8 characters long.'
+        })
+        return
+      }
       const hashedPassword = await bcrypt.hash(newPassword, 10)
 
       await UserModel.query().patchAndFetchById(userIdToUpdate, { password: hashedPassword })
@@ -270,10 +355,10 @@ const updateProfile = async (req: Request & { user?: any }, res: Response): Prom
       })
     }
     if (name) {
-      if (name.length < 3 || name.length > 25) {
+      if (name.length < 3 || !namePattern.test(name)) {
         res.status(400).json({
-          error: 'INVALID_NEW_NAME',
-          message: 'The name must consist of between 3 to 25 characters'
+          error: 'INVALID_NAME',
+          message: 'Make sure name is valid.'
         })
         return
       }
@@ -291,6 +376,14 @@ const updateProfile = async (req: Request & { user?: any }, res: Response): Prom
 const deleteUser = async (req: Request & { user?: any }, res: Response): Promise<void> => {
   try {
     const userId = req.params.id
+    if (!uuidValidate(userId)) {
+      res.status(400).json({
+        error: 'INVALID_ID',
+        message: 'The provided ID is not a valid UUID.'
+      })
+      return
+    }
+
     const userToDelete = await UserModel.query().findById(userId)
 
     if (!userToDelete) {

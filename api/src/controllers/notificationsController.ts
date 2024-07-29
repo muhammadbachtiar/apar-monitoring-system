@@ -48,7 +48,7 @@ const notificationToCheck6Montly = async (): Promise<void> => {
 }
 
 const notificationToCheck1Montly = async (): Promise<void> => {
-  const thresholdDays = 1
+  const thresholdDays = 30
   const currentDate = new Date()
   currentDate.setDate(currentDate.getDate() - thresholdDays)
 
@@ -101,10 +101,10 @@ const saveNotificationToCheck = async (message: number, locationName: string, ch
   let title = ''
 
   if (checkType === 'MONTHLY') {
-    notificationMessage = `Terdapat ${message} APAR yang perlu dilakukan pemeriksaan bulanan di lokasi ${locationName}. Segera lakukan pemeriksaan pada APAR.`
+    notificationMessage = `Terdapat ${message} APAR yang perlu dilakukan pemeriksaan bulanan di ${locationName}. Segera lakukan pemeriksaan pada APAR.`
     title = 'Peringatan Pemeriksaan APAR Bulanan'
   } else if (checkType === 'SEMESTER') {
-    notificationMessage = `Terdapat ${message} APAR yang perlu dilakukan pemeriksaan semester di lokasi ${locationName}. Segera lakukan pemeriksaan pada APAR.`
+    notificationMessage = `Terdapat ${message} APAR yang perlu dilakukan pemeriksaan semester di ${locationName}. Segera lakukan pemeriksaan pada APAR.`
     title = 'Peringatan Pemeriksaan APAR Semester'
   }
 

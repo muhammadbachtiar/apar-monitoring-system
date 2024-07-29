@@ -60,6 +60,7 @@ const options = {
 const locationStatistic: TableColumn<DataRowLocation>[] = [
   {
     name: 'Lokasi',
+    cell: (row) =><div>{row.location_name}</div>,
     selector: (row) => row.location_name,
     sortable: true,
   },

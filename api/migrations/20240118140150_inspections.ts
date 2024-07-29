@@ -6,7 +6,7 @@ export async function up (knex: Knex): Promise<void> {
   await knex.schema.createTable(TABLE_NAME, (table) => {
     table.uuid('id').primary().unique()
     table.json('documents')
-    table.json('result_check')
+    table.json('result_check').notNullable()
     table.uuid('id_apar').notNullable().references('id').inTable('apars')
     table.uuid('id_checker_account').notNullable().references('id').inTable('users')
     table.string('checker_name', 52).notNullable()
@@ -14,6 +14,13 @@ export async function up (knex: Knex): Promise<void> {
     table.timestamp('check_time').defaultTo(knex.fn.now()).notNullable()
     table.string('inspection_type', 16).notNullable()
   })
+
+  await knex.schema.raw(`
+    ALTER TABLE ${TABLE_NAME}
+    ADD CONSTRAINT checker_name_length CHECK (LENGTH(checker_name) >= 3),
+    ADD CONSTRAINT checker_name_valid CHECK (checker_name ~ '^[a-zA-Z\\s]+$'),
+    ADD CONSTRAINT inspection_type_not_empty CHECK (inspection_type <> '')
+  `)
 }
 
 export async function down (knex: Knex): Promise<void> {

@@ -2,7 +2,7 @@ import { LocationModel } from '../models/location'
 import { LocationCheckerModel } from '../models/location_checker'
 import { AparModel } from '../models/apar'
 import { type Request, type Response } from 'express'
-import { v4 as uuidv4 } from 'uuid'
+import { v4 as uuidv4, validate as uuidValidate } from 'uuid'
 
 const addLocation = async (req: Request, res: Response): Promise<void> => {
   try {
@@ -18,7 +18,15 @@ const addLocation = async (req: Request, res: Response): Promise<void> => {
 
     const registeredLocations = []
 
-    for (const { location_name, checker_6monthly, checker_1monthly } of locations) {
+    for (const { location_name, checker_6monthly = [], checker_1monthly = [] } of locations) {
+      if (location_name.length <= 0) {
+        res.status(400).json({
+          error: 'INVALID_LOCATION_NAME',
+          message: 'Make sure location name is valid.'
+        })
+        return
+      }
+
       const existingLocation = await LocationModel.query().findOne({ location_name })
 
       if (existingLocation) {
@@ -70,6 +78,15 @@ const addLocation = async (req: Request, res: Response): Promise<void> => {
 
 const getLocationById = async (req: Request, res: Response): Promise<void> => {
   const locationId = req.params.id
+
+  if (!uuidValidate(locationId)) {
+    res.status(400).json({
+      error: 'INVALID_ID_LOCATION',
+      message: 'The provided ID is not a valid UUID.'
+    })
+    return
+  }
+
   const filterById = await LocationModel.query().findById(locationId).withGraphFetched('[checker]')
 
   if (filterById === null || filterById === undefined) {
@@ -97,8 +114,26 @@ const getAllLocations = async (req: Request, res: Response): Promise<void> => {
 
 const updateLocation = async (req: Request & { location?: any }, res: Response): Promise<void> => {
   const locationIdToUpdate = req.params.id
+
+  if (!uuidValidate(locationIdToUpdate)) {
+    res.status(400).json({
+      error: 'INVALID_ID',
+      message: 'The provided ID is not a valid UUID.'
+    })
+    return
+  }
+
   const data = req.body
   const location_name = data.data.location_name
+
+  if (location_name.length <= 0) {
+    res.status(400).json({
+      error: 'INVALID_LOCATION_NAME',
+      message: 'Make sure location name is valid.'
+    })
+    return
+  }
+
   try {
     const locationToUpdate = await LocationModel.query().findById(locationIdToUpdate).withGraphFetched('[checker]')
 
@@ -188,7 +223,14 @@ const updateLocation = async (req: Request & { location?: any }, res: Response):
 const deleteLocation = async (req: Request & { location?: any }, res: Response): Promise<void> => {
   try {
     const locationId = req.params.id
-    const data = req.body
+    if (!uuidValidate(locationId)) {
+      res.status(400).json({
+        error: 'INVALID_ID',
+        message: 'The provided ID is not a valid UUID.'
+      })
+      return
+    }
+
     const locationToDelete = await LocationModel.query().findById(locationId)
 
     if (!locationToDelete) {
@@ -208,8 +250,6 @@ const deleteLocation = async (req: Request & { location?: any }, res: Response):
       return
     }
 
-    const checkerIdsToDelete = data.map((item: { id: string }) => item.id)
-    await LocationCheckerModel.query().whereIn('id', checkerIdsToDelete as string[]).del()
     await LocationModel.query().deleteById(locationId)
 
     res.status(200).json({

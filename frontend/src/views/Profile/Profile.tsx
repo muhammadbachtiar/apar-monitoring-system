@@ -269,7 +269,7 @@ function Profile() {
                                 <Form.Label>Password Baru</Form.Label>
                                 <Form.Control type="password" name='newPassword' placeholder="Password Baru" onChange={handleChange} required isInvalid={isPasswordValid} />
                                 <Form.Control.Feedback type="invalid">
-                                    Masukan setidaknya 8 Karakter
+                                    Masukkan password yang lebih kuat
                                 </Form.Control.Feedback>
                             </Form.Group>
                             <Form.Group as={Col} md="3" controlId="validationCustom03">

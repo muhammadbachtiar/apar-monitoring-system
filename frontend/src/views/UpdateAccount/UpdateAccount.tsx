@@ -22,7 +22,7 @@ function UpdateAccount() {
         const { name, value } = event.target;
         setFormData({ ...formData, [name]: value });
         if (name === "name") {
-            setIsNameValid(value.length < 3 || value.length > 25 );
+            setIsNameValid(value.length < 3 || value.length > 52 );
           }
           
         if (name === "username") {
@@ -163,7 +163,7 @@ function UpdateAccount() {
                                       isInvalid={isNameValid}
                                   />
                                   <Form.Control.Feedback type="invalid">
-                                      Nama harus terdiri dari antara 3 sampai 25 karakter!
+                                      Yakin sudah memasukkan nama dengan benar?
                                   </Form.Control.Feedback>
                               </Form.Group>
                               <Form.Group as={Col} md="4" controlId="validationCustom02">
@@ -193,7 +193,7 @@ function UpdateAccount() {
                                   <Form.Label>Password</Form.Label>
                                   <Form.Control type="password" name='password' placeholder="Password" onBlur={handleChange} isInvalid={isPasswordValid} />
                                   <Form.Control.Feedback type="invalid">
-                                      Masukan setidaknya 8 Karakter
+                                      Masukkan password yang lebih kuat
                                   </Form.Control.Feedback>
                                   <div className="small form-text text-muted">Kosongkan jika tidak ingin mengubah password!</div>
                               </Form.Group>

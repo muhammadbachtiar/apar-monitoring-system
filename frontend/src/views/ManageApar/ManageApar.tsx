@@ -237,12 +237,14 @@ function ManageApar() {
     const columns: TableColumn<DataRow>[] = [
         {
             name: <div>Nomor APAR</div>,
+            cell: row => <div>{row.apar_number}</div>,
             selector: row => row.apar_number,
             sortable: true,
             width: "10%"
         },
         {
           name: <div>Lokasi</div>,
+          cell: row => <div>{row.location.location_name}</div>,
           selector: row => row.location.location_name,
           sortable: true,
           width: "15%"
@@ -433,7 +435,6 @@ function ManageApar() {
                     type="text"
                     placeholder={`Nomor Apar`}
                     {...register(`apar_number`)}
-                    disabled
                     />
                 </Form.Group>
                 <Form.Group>
@@ -461,9 +462,9 @@ function ManageApar() {
                         classNamePrefix="Lokasi"
                         isSearchable={false}
                         isClearable={true}
-                        options={[{value:"POWEDER", label:"Poweder"},{value:"HALOTRON", label:"Halotron"},{value:"CO2", label:"Co2"}]}
+                        options={[{value:"POWDER", label:"Powder"},{value:"HALOTRON", label:"Halotron"},{value:"CO2", label:"Co2"},{value:"FOAM", label:"Foam"}]}
                         {...register('apar_type')}
-                        defaultValue={[{value:"POWEDER", label:"Poweder"},{value:"HALOTRON", label:"Halotron"},{value:"CO2", label:"Co2"}].find(option => option.value === getValues('apar_type'))}
+                        defaultValue={[{value:"POWDER", label:"Powder"},{value:"HALOTRON", label:"Halotron"},{value:"CO2", label:"Co2"},{value:"FOAM", label:"Foam"}].find(option => option.value === getValues('apar_type'))}
                         onChange={(selectedOption) =>
                             handleSelectChange(selectedOption, 'apar_type')
                             }

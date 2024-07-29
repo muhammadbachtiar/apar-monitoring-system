@@ -14,6 +14,12 @@ export async function up (knex: Knex): Promise<void> {
     table.timestamp('last_filing_time').defaultTo(knex.fn.now()).notNullable()
     table.timestamp('registered_time').defaultTo(knex.fn.now()).notNullable()
   })
+
+  await knex.schema.raw(`
+    ALTER TABLE ${TABLE_NAME}
+    ADD CONSTRAINT apar_number_length CHECK (LENGTH(apar_number) >= 4),
+    ADD CONSTRAINT apar_type_not_empty CHECK (apar_type <> '')
+  `)
 }
 
 export async function down (knex: Knex): Promise<void> {

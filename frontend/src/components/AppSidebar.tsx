@@ -30,10 +30,10 @@ const SideBarApp: React.FC<OffcanvasContentProps> = ({ show, handleClose }) => {
                     <ListGroup.Item action as="div"><span className="badge"><FontAwesomeIcon icon={faLocationDot} /></span>Lokasi</ListGroup.Item>
                   </Link>
                   <Link to="/apar">
-                    <ListGroup.Item action as="div"><span className="badge"><FontAwesomeIcon icon={faFireExtinguisher} /></span>Apar</ListGroup.Item>
+                    <ListGroup.Item action as="div"><span className="badge"><FontAwesomeIcon icon={faFireExtinguisher} /></span>APAR</ListGroup.Item>
                   </Link>
                   <Link to="/account">
-                    <ListGroup.Item action as="div"><span className="badge"><FontAwesomeIcon icon={faUsers} /></span>Manajemen Akun</ListGroup.Item>
+                    <ListGroup.Item action as="div"><span className="badge"><FontAwesomeIcon icon={faUsers} /></span>Akun</ListGroup.Item>
                   </Link>
                 </Accordion.Body>
               </Accordion.Item>
